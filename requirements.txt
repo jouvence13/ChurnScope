@@ -1,8 +1,6 @@
-@"
 pandas
 numpy
 scikit-learn
 matplotlib
 seaborn
 jupyter
-"@ | Out-File -Encoding utf8 requirements.txt
