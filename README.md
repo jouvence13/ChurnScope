@@ -173,6 +173,8 @@ Les trois livrables sont disponibles dans [docs/](docs/) :
 
 Le support de restitution métier est disponible dans [presentation_dirigeants.md](docs/presentation_dirigeants.md).
 
+Le guide pédagogique pour préparer l'oral est disponible dans [guide_explication_oral.md](docs/guide_explication_oral.md).
+
 Les notebooks contiennent le détail reproductible des étapes :
 
 - [01_exploration.ipynb](notebooks/01_exploration.ipynb)
