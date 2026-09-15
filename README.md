@@ -1,198 +1,172 @@
 # ChurnScope
 
-Prédiction et priorisation du churn client dans les télécommunications.
+**Prediction, Explicabilite (SHAP), Aide a la Decision et Surveillance (MLOps) du Churn Client.**
 
-ChurnScope est un projet de Machine Learning réalisé dans le cadre de la formation DPIA 1 à L'École Multimédia. L'objectif est d'identifier les clients susceptibles de quitter l'entreprise et d'aider les équipes de rétention à décider qui contacter en priorité.
+[![CI/CD Pipeline](https://github.com/jouvence13/ChurnScope/actions/workflows/ci.yml/badge.svg)](https://github.com/jouvence13/ChurnScope/actions)
+[![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.14-blue.svg)](https://www.python.org/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Linting: flake8](https://img.shields.io/badge/linting-flake8-green.svg)](https://flake8.pycqa.org/)
+[![Security: RGPD](https://img.shields.io/badge/security-RGPD%20%2F%20PII%20Hash-success.svg)](https://www.cnil.fr/)
 
-## Résumé
+---
 
-Le projet couvre l'ensemble du parcours :
+## Presentation du Projet
 
-- analyse de la qualité des données ;
-- exploration des profils de clients partis et restés ;
-- préparation sans fuite de données ;
-- comparaison de quatre modèles de classification ;
-- optimisation par validation croisée et recherche sur grille ;
-- validation finale sur un jeu de test indépendant ;
-- dashboard Streamlit destiné aux équipes métier.
+ChurnScope est un projet industriel de Machine Learning developpe dans le cadre de la formation **Directeur de projet en intelligence artificielle (DPIA 1)** a **L'Ecole Multimedia**.
 
-## Résultat principal
+L'objectif est d'aider les equipes de retention d'une entreprise de telecommunications a :
+1. **Identifier avec precision les clients a haut risque de depart (Churn)**.
+2. **Comprendre individuellement les causes du risque grace a l'explicabilite SHAP**.
+3. **Simuler l'impact d'offres commerciales de fidelisation (Simulateur What-If)**.
+4. **Surveiller la derive des donnees et du modele en production (Evidently AI)**.
 
-Le modèle retenu est un **Random Forest optimisé**. Il a été sélectionné en donnant la priorité au rappel de la classe churn, car manquer un client sur le départ peut coûter davantage qu'une fausse alerte.
+---
 
-| Métrique | Résultat sur le jeu de test |
-|---|---:|
-| Accuracy | 0,746 |
-| Précision churn | 0,514 |
-| Rappel churn | 0,794 |
-| F1-score churn | 0,624 |
-| AUC | 0,841 |
+## Competences RNCP Couvertes
 
-Sur les `374` clients ayant réellement quitté l'entreprise, le modèle en détecte `297` et en manque `77`. Il génère également `281` fausses alertes. Le seuil de décision doit donc être adapté au coût réel des campagnes de rétention.
+| Referentiel | Intitule de la Competence | Realisation dans ChurnScope |
+| :--- | :--- | :--- |
+| **D-02** | *Creer un algorithme d'Intelligence Artificielle adapte et accessible.* | Pipeline scikit-learn equilibre, modele Random Forest optimise, explicabilite SHAP locale et globale, interface accessible et intuitive. |
+| **D-04** | *Concevoir des pipelines d'integration et deploiement continu (CI/CD).* | Workflow GitHub Actions (`.github/workflows/ci.yml`), validation automatique du code (`flake8`, `black`), suite de tests unitaires et de non-regression (`pytest`). |
+| **D-06** | *Piloter la performance de la solution d'IA via des outils de monitoring.* | Monitoring de derive de distribution (*Data Drift* et *Target Drift*) avec **Evidently AI** et generation de rapports interactifs. |
 
-## Dashboard interactif
+---
 
-Le dashboard Streamlit répond à la question : **« Qui dois-je contacter cette semaine, et pourquoi ? »**
+## Performance du Modele Retenu
 
-Il propose :
+Le modele final est un **Random Forest optimise** avec validation croisee stratifiee et ponderation equilibree des classes.
 
-- des indicateurs de synthèse ;
-- des filtres par contrat, service internet et ancienneté ;
-- une table des clients triée par probabilité de churn ;
-- le revenu mensuel exposé ;
-- trois graphiques d'exploration ;
-- un curseur de seuil affichant en direct le nombre de clients ciblés, le rappel et la précision.
+| Metrique | Performance sur Jeu de Test (20%) | Interpretation Metier |
+| :--- | :---: | :--- |
+| **ROC-AUC** | **0,841** | Excellente capacite de discrimination globale des profils a risque. |
+| **Rappel Churn (Recall)** | **79,4 %** | **297 clients churners detectes sur 374** (manque seulement 77 departs). |
+| **Precision Churn** | **51,4 %** | 1 client cible sur 2 est un churner reel (arbitrage parametrable via seuil). |
+| **F1-Score Churn** | **0,624** | Equilibre optimise entre detection exhaustive et cout de ciblage. |
+| **Accuracy** | **74,6 %** | Precision globale sur l'ensemble de la population testee. |
 
-### Lancer le dashboard
+---
 
-Depuis la racine du projet :
+## Application et Dashboard Interactif Streamlit
 
+Le dashboard Streamlit (`app.py`) offre 4 espaces de travail :
+
+1. **Priorisation & Synthese Decisionnelle** :
+   - Indicateurs en temps reel (taux de churn, clients a contacter, revenu mensuel a risque).
+   - Curseur de seuil interactif avec calcul en direct de la precision et du rappel.
+   - Liste des clients prioritaires triee par probabilite de resiliation.
+2. **Explicabilite Client (SHAP)** *(Competence D-02)* :
+   - Selection d'un client et affichage des facteurs qui augmentent ou reduisent son risque de depart.
+3. **Simulateur What-If Retention** :
+   - Simulation immediate de l'efficacite d'un changement de contrat, d'une remise tarifaire ou d'un service offert.
+4. **Monitoring & Data Drift (Evidently AI)** *(Competence D-06)* :
+   - Surveillance de la stabilite des donnees de production et telechargement du rapport interactif complet.
+
+### Lancer l'application :
 ```bash
 streamlit run app.py
 ```
+Puis accedez a `http://localhost:8501`.
 
-Puis ouvrir l'adresse affichée par Streamlit, généralement :
+---
 
-```text
-http://localhost:8501
-```
+## Securite, Qualite et Conformite RGPD
 
-Le dashboard charge le modèle sérialisé et les prédictions préparées. Il ne réentraîne pas le modèle au démarrage.
+* **Protection des PII / RGPD** : Anonymisation des `customerID` via un hachage cryptographique **HMAC-SHA256 sale** (`src/data/anonymizer.py`).
+* **Validation stricte des donnees** : Schemas **Pydantic** (`src/data/schema.py`) garantissant l'integrite et la validite des entrees.
+* **Isolation des secrets** : Template `.env.example` et fichier `.env` non versionne.
+* **Qualite de code** : 100% conforme PEP 8 (`flake8`) et formatte avec `black`.
 
-## Installation
+---
 
-### Windows PowerShell
-
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-### macOS ou Linux
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-## Reproduire les artefacts du modèle
-
-Le dataset brut doit être placé dans :
-
-```text
-data/raw/WA_Fn-UseC_-Telco-Customer-Churn.csv
-```
-
-Pour régénérer le modèle et les prédictions utilisées par Streamlit :
-
-```bash
-python src/export_model.py
-```
-
-Cette commande crée :
-
-- `data/processed/churn_model.joblib` : pipeline scikit-learn sérialisé ;
-- `data/processed/customer_predictions.csv` : données clients, probabilités et prédictions.
-
-Le modèle est entraîné une seule fois par cette commande. L'application charge ensuite le fichier `.joblib` avec `joblib` et met les données en cache avec `st.cache_data`.
-
-## Organisation du projet
+## Organisation du Code
 
 ```text
 ChurnScope/
-├── app.py                              # dashboard Streamlit interactif
+├── .github/
+│   └── workflows/
+│       └── ci.yml                     # Pipeline CI/CD GitHub Actions (D-04)
 ├── data/
-│   ├── raw/                            # dataset original, non modifié
-│   └── processed/                      # modèle et prédictions exportés
+│   ├── raw/                           # Dataset brut Telco Customer Churn
+│   └── processed/                     # Modele serialise (.joblib) et predictions
 ├── docs/
-│   ├── 01_analyse_preparation.md       # qualité et exploration
-│   ├── 02_apprentissage_modeles.md     # modèles et optimisation
-│   ├── 03_validation_conclusion.md     # validation et limites
-│   ├── presentation_dirigeants.md      # support de restitution métier
-│   └── dashboard_churn.html             # dashboard Plotly autonome
+│   ├── 01_analyse_preparation.md       # Livrable 1 : Qualite & Preparation
+│   ├── 02_apprentissage_modeles.md     # Livrable 2 : Apprentissage & Optimisation
+│   ├── 03_validation_conclusion.md     # Livrable 3 : Validation & Conclusions
+│   ├── presentation_dirigeants.md      # Support de restitution pour la direction
+│   ├── data_drift_report.html         # Rapport Evidently AI interactif (D-06)
+│   └── guide_explication_oral.md      # Guide de preparation a la soutenance
 ├── notebooks/
-│   ├── 01_exploration.ipynb
-│   ├── 02_modelisation.ipynb
-│   └── 03_validation.ipynb
+│   ├── 01_exploration.ipynb           # EDA et visualisations
+│   ├── 02_modelisation.ipynb          # Comparaison des 4 algorithmes
+│   └── 03_validation.ipynb            # Evaluation fine et matrice de confusion
 ├── src/
-│   ├── dashboard.py                    # génération du dashboard Plotly HTML
-│   └── export_model.py                 # entraînement et export du pipeline
-├── requirements.txt
+│   ├── data/
+│   │   ├── schema.py                  # Schemas de validation Pydantic
+│   │   ├── anonymizer.py              # Anonymisation RGPD (HMAC-SHA256)
+│   │   └── loader.py                  # Chargement et pretraitement scikit-learn
+│   ├── models/
+│   │   ├── train.py                   # Entrainement et calcul des metriques
+│   │   └── explainability.py          # Module d'explicabilite SHAP (D-02)
+│   ├── monitoring/
+│   │   └── drift.py                   # Monitoring Data Drift Evidently (D-06)
+│   ├── export_model.py                # Script principal d'entrainement/export
+│   └── dashboard.py                   # Dashboard HTML Plotly
+├── tests/
+│   ├── test_data_validation.py        # Validation Pydantic
+│   ├── test_pipeline.py               # Inference et preprocessing
+│   ├── test_model_performance.py      # Non-regression ML (Recall >= 0.75, AUC >= 0.80)
+│   └── test_security.py               # Securite et anonymisation
+├── scripts/
+│   └── package_submission.py          # Script de generation du ZIP de rendu
+├── app.py                             # Application Streamlit multi-onglets
+├── requirements.txt                   # Dependances du projet
+├── pytest.ini                         # Configuration Pytest
+├── .flake8                            # Configuration Flake8
 └── README.md
 ```
 
-## Méthodologie
+---
 
-### Données
+## Installation et Guide d'Execution
 
-Le projet utilise le dataset **Telco Customer Churn**, attribué à blastchar et disponible sur Kaggle. Il contient `7043` clients et `21` colonnes.
+### 1. Cloner et configurer l'environnement
+```bash
+git clone https://github.com/jouvence13/ChurnScope.git
+cd ChurnScope
 
-La cible `Churn` est déséquilibrée :
+# Creation et activation de l'environnement virtuel
+python3 -m venv .venv
+source .venv/bin/activate  # Windows : .\.venv\Scripts\Activate.ps1
 
-- `5174` clients restés, soit `73,46 %` ;
-- `1869` clients partis, soit `26,54 %`.
-
-`TotalCharges` contient `11` chaînes vides pour des clients dont `tenure = 0`. Elles sont converties en valeurs manquantes puis imputées dans le pipeline. `customerID` est conservé pour identifier les clients dans le dashboard, mais exclu des variables d'apprentissage.
-
-### Modèles comparés
-
-- régression logistique ;
-- Ridge Classifier ;
-- arbre de décision ;
-- Random Forest.
-
-Le prétraitement est intégré à un `Pipeline` scikit-learn :
-
-- imputation médiane et standardisation des variables numériques ;
-- imputation de la modalité la plus fréquente et encodage One-Hot des variables catégorielles.
-
-La séparation train/test est effectuée avant toute transformation apprenante, avec stratification sur la cible.
-
-### Optimisation
-
-Le Random Forest est optimisé avec une validation croisée stratifiée à `5` plis et une recherche sur grille. Le score optimisé est le rappel de la classe churn.
-
-Paramètres retenus :
-
-```text
-n_estimators=200
-max_depth=6
-min_samples_leaf=1
-class_weight="balanced"
+# Installation des dependances
+pip install -r requirements.txt
 ```
 
-## Documents et notebooks
+### 2. Entrainer le modele et exporter les artefacts
+```bash
+python3 src/export_model.py
+```
 
-Les trois livrables sont disponibles dans [docs/](docs/) :
+### 3. Executer l'analyse de Data Drift (Evidently AI)
+```bash
+python3 src/monitoring/drift.py
+```
 
-1. [Analyse et préparation](docs/01_analyse_preparation.md)
-2. [Apprentissage et modèles](docs/02_apprentissage_modeles.md)
-3. [Validation et conclusion](docs/03_validation_conclusion.md)
+### 4. Lancer la suite de tests automatises (Pytest)
+```bash
+pytest tests/ -v
+```
 
-Le support de restitution métier est disponible dans [presentation_dirigeants.md](docs/presentation_dirigeants.md).
+### 5. Generer l'archive ZIP de rendu final
+Pour creer le fichier de rendu officiel (ex: `arthur_mensch_projet3_AIA01.zip`) :
+```bash
+python3 scripts/package_submission.py --name "nom_prenom" --classe "AIA01"
+```
 
-Le guide pédagogique pour préparer l'oral est disponible dans [guide_explication_oral.md](docs/guide_explication_oral.md).
+---
 
-Les notebooks contiennent le détail reproductible des étapes :
+## Auteur et Certification
 
-- [01_exploration.ipynb](notebooks/01_exploration.ipynb)
-- [02_modelisation.ipynb](notebooks/02_modelisation.ipynb)
-- [03_validation.ipynb](notebooks/03_validation.ipynb)
-
-## Limites et suite possible
-
-Le modèle est un outil d'aide à la priorisation, pas une décision automatique. Les principales limites sont :
-
-- les résultats sont descriptifs et ne prouvent pas de causalité ;
-- le dataset représente une période et une population données ;
-- le seuil `0,5` n'est pas nécessairement optimal économiquement ;
-- les fausses alertes peuvent entraîner des coûts de rétention ;
-- les performances doivent être surveillées sur de nouvelles données.
-
-Une suite naturelle consiste à calibrer le seuil selon le coût d'un churn manqué et celui d'une fausse alerte, puis à mesurer l'effet réel des actions de rétention avec un groupe témoin.
-
-## Auteur
-
-Jouvence — DPIA 1, L'École Multimédia
+* **Auteur** : Jouvence
+* **Formation** : Directeur de Projet en Intelligence Artificielle (DPIA 1)
+* **Etablissement** : L'Ecole Multimedia — Annee 2026

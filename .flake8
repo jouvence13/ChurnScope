@@ -1,0 +1,13 @@
+[flake8]
+max-line-length = 120
+exclude =
+    .venv,
+    .git,
+    __pycache__,
+    build,
+    dist,
+    notebooks
+per-file-ignores =
+    src/export_model.py:E402
+    src/monitoring/drift.py:E402
+ignore = E203, W503
