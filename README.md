@@ -84,7 +84,7 @@ ChurnScope/
 │   ├── 02_modelisation.ipynb            # Comparaison des 4 modèles + GridSearchCV
 │   └── 03_validation.ipynb              # Validation finale et matrice de confusion
 ├── presentation/                        # Support de soutenance (non versionné, voir .gitignore)
-│   ├── generate_presentation.py         # Génère soutenance_churnscope.pptx (11 diapositives)
+│   ├── generate_presentation.py         # Génère soutenance_churnscope.pptx (15 diapositives)
 │   ├── generate_presentation.ps1        # Point d'entrée Windows pour le script ci-dessus
 │   ├── soutenance_churnscope.pptx       # Diaporama généré (régénérable, non commité)
 │   └── guide_explication_oral.md        # Questions/réponses pour préparer l'oral (non commité)
