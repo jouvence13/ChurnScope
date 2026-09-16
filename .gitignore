@@ -71,7 +71,11 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-docs/guide_explication_oral.md
+
+# Fichiers locaux de preparation a la soutenance (non destines au depot)
+# Regenerer via : presentation/generate_presentation.ps1 (ou generate_presentation.py)
+presentation/soutenance_churnscope.pptx
+presentation/guide_explication_oral.md
 
 # PyBuilder
 .pybuilder/
