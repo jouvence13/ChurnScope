@@ -70,18 +70,19 @@ with st.sidebar:
     st.header("Parametres et Filtres")
 
     st.subheader("Seuil de Decision")
-    threshold = st.slider(
+    threshold_percent = st.slider(
         "Seuil de declenchement d'alerte",
-        min_value=0.10,
-        max_value=0.90,
-        value=0.50,
-        step=0.05,
-        format="%.0f%%",
+        min_value=10,
+        max_value=90,
+        value=50,
+        step=5,
+        format="%d%%",
         help=(
             "Ajustez le seuil pour arbitrer entre detecter un maximum "
             "de churners (Rappel) ou minimiser les fausses alertes (Precision)."
         ),
     )
+    threshold = threshold_percent / 100
 
     st.divider()
     st.subheader("Filtres Population")
