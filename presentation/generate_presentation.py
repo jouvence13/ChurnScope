@@ -281,11 +281,16 @@ def add_table(
     highlight_rows=(),
     font_size=12,
     first_col_left=True,
+    col_widths=None,
 ):
     n_rows = len(rows) + 1
     n_cols = len(headers)
     table_shape = slide.shapes.add_table(n_rows, n_cols, left, top, width, height)
     table = table_shape.table
+
+    if col_widths is not None:
+        for c, w in enumerate(col_widths):
+            table.columns[c].width = w
 
     for c, h in enumerate(headers):
         cell = table.cell(0, c)
@@ -701,7 +706,7 @@ def slide_05_protocol(prs):
 
 def slide_06_comparison(prs):
     slide = light_slide(prs)
-    add_header(slide, "Resultats", "Quatre modeles, une base de comparaison commune")
+    add_header(slide, "Resultats", "Comparer les quatre modeles")
 
     add_table(
         slide,
@@ -718,6 +723,14 @@ def slide_06_comparison(prs):
         ],
         highlight_rows={3},
         font_size=11.5,
+        col_widths=[
+            Inches(2.3),
+            Inches(1.34),
+            Inches(1.34),
+            Inches(1.34),
+            Inches(1.34),
+            Inches(1.34),
+        ],
     )
 
     add_textbox(
@@ -953,9 +966,7 @@ def slide_09_explainability(prs):
 
 def slide_10_dashboard(prs):
     slide = light_slide(prs)
-    add_header(
-        slide, "Demonstration", "Explorer les predictions dans le dashboard Streamlit"
-    )
+    add_header(slide, "Demonstration", "Explorer les predictions dans Streamlit")
 
     cards = [
         (
@@ -1111,7 +1122,7 @@ def slide_11_quality_security(prs):
 def slide_12_monitoring(prs):
     slide = light_slide(prs)
     add_header(
-        slide, "Monitoring", "Surveiller la derive des donnees en production — D-06"
+        slide, "Monitoring — D-06", "Surveiller la derive des donnees en production"
     )
 
     add_bullets(
